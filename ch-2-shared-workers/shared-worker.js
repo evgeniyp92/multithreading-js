@@ -63,3 +63,6 @@ self.onconnect = event => {
 // environment can lead to long response times. Luckily, interacting with ports
 // that no longer have a valid JavaScript associated with them doesn’t have much
 // of a side effect.
+
+// signature for SharedWorkers is SharedWorker(filename, nameOrOptions); so you
+// can make several sharedworkers with differentkeys if you provide a second arg
