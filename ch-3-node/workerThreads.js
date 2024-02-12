@@ -3,11 +3,16 @@
 // without changing this will not yield better results -- you'll be stacking
 // threads on threads
 
-// // basic worker instantiation
-const { Worker, isMainThread, workerData } = require('worker_threads');
+// // bidirectional comms via default message port
+const { Worker, isMainThread, parentPort } = require('worker_threads');
 if (isMainThread) {
-  // literals such as the one passed below are cloned (what about references to objects/arrays?)
-  const worker = new Worker(__filename, { workerData: { num: 42 } });
+  const worker = new Worker(__filename);
+  worker.on('message', msg => {
+    worker.postMessage(msg);
+  });
 } else {
-  console.log(workerData.num === 42); // returns true
+  parentPort.on('message', msg => {
+    console.log('received message from parent: ', msg);
+  });
+  parentPort.postMessage('hello world');
 }
